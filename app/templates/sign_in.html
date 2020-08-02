@@ -1,0 +1,32 @@
+{%extends "baseLayout.html"%}
+
+{%block title %} Login {%endblock%}
+
+
+{%block content %}
+<div class="form-control">
+	<form  action="{{url_for('login')}}" method="post">
+		{{form.hidden_tag() }}
+		<div class="form-group">
+			{{form.firstName.label }} <br>
+			{{form.firstName(class='form-control')}}
+		</div>
+		<div class="form-group">
+			{{form.lastName.label }} <br>
+			{{form.lastName(class='form-control')}}
+		</div>
+		<div class="form-group">
+			{{form.regNo.label }} <br>
+			{{form.regNo(class='form-control')}}
+		</div>
+		<div class="form-group">
+			{{form.password.label }} <br>
+			{{form.password(class='form-control', type='password')}}
+		</div>
+		 <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+		<div>{{ form.submit(class='btn btn-primary') }}</div>
+		
+	</form>
+	
+</div>
+{%endblock%}
