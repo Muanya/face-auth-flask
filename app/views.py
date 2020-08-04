@@ -1,7 +1,8 @@
 from flask import render_template, request, redirect
 from flask import url_for, flash
 from flask_login import current_user, login_user
-from flask_login import logout_user
+from flask_login import logout_user, login_required
+from werkzeug.urls import url_parse
 from app import app
 from app.forms import LoginForm 
 from app.models import User_Profile as user
@@ -12,7 +13,7 @@ import os
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-	return render_template('pictureCapture.html')
+	return render_template('home.html')
 
 
 
@@ -29,7 +30,12 @@ def login():
 			flash('Incorrect registration number or password')
 			return redirect('/login')
 		# login_user(usr, remember=form.remember_me.data)
-		return redirect(url_for('picture_verify', usr=usr.id))
+		next_page = request.args.get('next')
+
+		if not next_page or url_parse(next_page).netloc != '':
+			return redirect(url_for('picture_verify', usr=pr.encoding_int(usr.id), token=pr.token_key))
+
+		return redirect(url_for('picture_verify', usr=pr.encoding_int(usr.id), token=pr.token_key, next=next_page))
 	return render_template('sign_in.html', form=form)
 
 
@@ -40,8 +46,18 @@ def logout():
 
 @app.route('/pic', methods=['POST', 'GET'])
 def picture_verify():
-	get_id = int(request.args.get('usr'))
+	try:
+		get_id = pr.decoding_int(request.args.get('usr'))
+	except:
+		flash('method not acceptable!')
+		return redirect(url_for('login'))
+		
 	usr = user.query.get(get_id)
+
+	if pr.token_key != request.args.get('token'):
+		flash('method not acceptable! Sign In first!')
+		return redirect(url_for('login'))
+
 	print(usr)
 
 	if request.method == 'POST':
@@ -52,7 +68,7 @@ def picture_verify():
 
 		if face_encoding.all() == 0:
 			flash('Could not find a face in the picture. Try Adjusting the lighting conditions')
-			return redirect(url_for('picture_verify', usr=usr.id))
+			return redirect(url_for('picture_verify', usr=pr.encoding_int(usr.id), token=pr.token_key))
 
 		# file_url = os.path.join(app.config['UPLOAD_FOLDER'], '2016_232383')
 		# pr.save_enc(file_url, face_encoding)
@@ -65,7 +81,10 @@ def picture_verify():
 			print('Nwokeji Peter Chimuanya')
 			login_user(usr)
 			flash('Succesfully Logged in')
-			return redirect(url_for('login'))
+			next_page = request.args.get('next')
+			if not next_page or url_parse(next_page) != '':
+				return redirect(url_for('logged_index'))
+			return redirect(next_page)
 		else:
 			print('Face does not match the test data')
 			flash('Failed to log in. Face does not match')
@@ -74,4 +93,12 @@ def picture_verify():
 
 
 		#print(face_encoding)
-	return render_template('pictureCapture.html', user_id=usr.id)
+	return render_template('pictureCapture.html', usr_enc=pr.encoding_int(usr.id), token_key=pr.token_key)
+
+@app.route('/welcome')
+@login_required
+def logged_index():
+	return render_template('success.html')
+
+
+

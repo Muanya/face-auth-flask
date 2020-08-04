@@ -2,6 +2,9 @@ import cv2
 import face_recognition
 import numpy as np 
 import base64
+import secrets
+
+token_key = secrets.token_urlsafe(20)
 
 def decode_base64(url):
 	encoded_image = url.split(',')[1]
@@ -48,3 +51,14 @@ def load_enc(url):
 	# load the data
 	data = np.load(url)
 	return data
+
+
+def encoding_int(a):
+	st = str(a).encode('utf-8', 'strict')
+	return base64.b64encode(st)
+
+def decoding_int(enc):
+	dec = base64.b64decode(enc)
+	return int(dec.decode())
+
+

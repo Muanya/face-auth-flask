@@ -1,42 +1,180 @@
+html {
+  height: 100%;
+}
+
 
 body {
-  align-content: center;
-  width: 760px;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(#141e30, #243b55);  
+  font-family: sans-serif; 
+  color: #fff;
 }
 
 
-#video {
+
+
+/*  Login form */
+
+.form_box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,.5);
+  box-sizing: border-box;
+  box-shadow: 0 15px 25px rgba(0,0,0,.6);
+  border-radius: 10px;
+}
+
+.form_box h2 {
+  margin: 0 0 30px;
+  padding: 0;
+  text-align: center;
+  color: #fff;
+}
+.form_box .user_box {
+  position: relative;
+}
+
+.form_box .user_box input{
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  color: #fff;
+  outline: none;
+  background: transparent;
+}
+
+.form_box .user_box label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  transition: .5s;
+}
+
+.form_box .user_box input:focus ~label,
+.form_box .user_box input:valid ~label {
+  top: -20px;
+  left: 0;
+  color: #03e9f4;
+  font-size: 10px
+}
+
+.form_box .submit_btn {
+  display: inline-block;
+  padding: 10px 20px;
+  color: #03e9f4;
+  text-transform: uppercase;
+  overflow: hidden;
+  transition: .5s;
+  margin-top: 40px;
+  margin-left: 150px;
+  letter-spacing: 3px;
+  border:none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+
+
+}
+
+.form_box .submit_btn:hover {
+  background: #03e9f4;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #03e9f4,
+              0 0 25px #03e9f4,
+              0 0 50px #03e9f4,
+              0 0 100px #03e9f4;
+
+}
+
+
+/* video Upload */
+
+.capture_card {
+  position: absolute;
+  top: 55%;
+  left: 55%;
+  width: 800px;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,.5);
+  box-sizing: border-box;
+  box-shadow: 0 15px 25px rgba(0,0,0,.6);
+  border-radius: 10px;
+}
+
+.capture_card .camera {
+    margin-top: 20px;
+    margin-left: 100px;
+}
+
+.capture_card video {
   border: 1px solid black;
   box-shadow: 2px 2px 3px black;
-  width:350px;
-  height:240px;
+  width:500px;
+  height:200px;
 }
 
-#photo {
-  border: 1px solid black;
-  box-shadow: 2px 2px 3px black;
-  width:350px;
-  height:240px;
-}
 
-#canvas {
+.capture_card canvas {
   display:none;
 }
 
-.camera {
-  width: 350px;
-  display:inline-block;
+.capture_card .output_img {
+  margin-top: 20px;
+  margin-left: 100px;
 }
 
-.output {
-  width: 350px;
-  display:inline-block;
+.capture_card img {
+  border: 1px solid black;
+  box-shadow: 2px 2px 3px black;
+  width:500px;
+  height:200px;
 }
 
-#captureButton {
+
+.capture_card .submit_btn {
+  display: inline-block;
+  padding: 10px 20px;
+  color: #03e9f4;
+  text-transform: uppercase;
+  overflow: hidden;
+  transition: .5s;
+  margin-top: 40px;
+  margin-left: 250px;
+  letter-spacing: 3px;
+  border:none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+
+
+}
+
+.capture_card .submit_btn:hover {
+  background: #03e9f4;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #03e9f4,
+              0 0 25px #03e9f4,
+              0 0 50px #03e9f4,
+              0 0 100px #03e9f4;
+
+}
+
+.capture_card #captureButton {
   display:block;
   position:relative;
-  margin-left:auto;
+  margin-left: 200px;
   margin-right:auto;
   bottom:32px;
   background-color: rgba(0, 150, 0, 0.5);

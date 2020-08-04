@@ -1,0 +1,16 @@
+{%extends "baseLayout.html"%}
+
+{%block title %} Login {%endblock%}
+
+
+{%block content %}
+
+<div>
+Welcome {{current_user.firstName}}
+<br>
+{{current_user.lastName}}
+<br>
+{{current_user.regNo}}
+</div>
+
+{%endblock%}

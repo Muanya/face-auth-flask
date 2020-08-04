@@ -11,6 +11,7 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 database = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
+login_manager.login_view = 'login'
 
 from app.models import User_Profile
 

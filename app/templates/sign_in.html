@@ -4,27 +4,34 @@
 
 
 {%block content %}
-<div class="form-control">
+
+<div class="form_box">
+
+	<h2>Login</h2>
+
 	<form  action="{{url_for('login')}}" method="post">
 		{{form.hidden_tag() }}
-		<div class="form-group">
-			{{form.firstName.label }} <br>
+		<div class="user_box">
+			
 			{{form.firstName(class='form-control')}}
+			{{form.firstName.label }}
 		</div>
-		<div class="form-group">
-			{{form.lastName.label }} <br>
+		<div class="form-group user_box">
 			{{form.lastName(class='form-control')}}
+			{{form.lastName.label }}
 		</div>
-		<div class="form-group">
-			{{form.regNo.label }} <br>
+		<div class="form-group user_box">
 			{{form.regNo(class='form-control')}}
+			{{form.regNo.label }} 
 		</div>
-		<div class="form-group">
-			{{form.password.label }} <br>
+		<div class="form-group user_box">
+			
 			{{form.password(class='form-control', type='password')}}
+			{{form.password.label }} 
 		</div>
 		 <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-		<div>{{ form.submit(class='btn btn-primary') }}</div>
+
+		<div>{{ form.submit(class='submit_btn') }}</div>
 		
 	</form>
 	
