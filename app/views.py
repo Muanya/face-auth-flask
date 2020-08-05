@@ -19,7 +19,7 @@ def index():
 @app.route('/register', methods=['POST', 'GET'])
 def register():
 	if current_user.is_authenticated:
-		return redirect(url_for('logged_in'))
+		return redirect(url_for('logged_index'))
 
 	form = SignUpForm()
 
@@ -40,7 +40,7 @@ def register():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
 	if current_user.is_authenticated:
-		return redirect(url_for('logged_in'))
+		return redirect(url_for('logged_index'))
 
 	form = LoginForm()
 

@@ -116,7 +116,7 @@ h3 {
 
 .capture_card {
   position: absolute;
-  top: 55%;
+  top: 56%;
   left: 55%;
   width: 800px;
   transform: translate(-50%, -50%);
@@ -135,7 +135,7 @@ h3 {
   border: 1px solid black;
   box-shadow: 2px 2px 3px black;
   width:500px;
-  height:200px;
+  height:180px;
 }
 
 
@@ -152,7 +152,7 @@ h3 {
   border: 1px solid black;
   box-shadow: 2px 2px 3px black;
   width:500px;
-  height:200px;
+  height:180px;
 }
 
 
