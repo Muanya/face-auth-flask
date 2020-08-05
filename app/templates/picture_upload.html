@@ -1,0 +1,34 @@
+{%extends "baseLayout.html" %}
+
+
+	{%block title %} Picture Verify {%endblock%}
+
+	
+	{% block script %}
+<script src="{{url_for('static', filename='script.js')}} "></script>
+{%endblock%}
+
+
+
+	{%block content %}
+	<div class="capture_card">
+
+	<div class="camera">
+		<video id="video"> Video Stream not available </video>
+		<button id="captureButton"> Capture</button>
+	</div>
+
+	<canvas id="canvas"></canvas>
+
+<div class="output_img">
+	<img id="photo" alt="The captured image will appear here">
+</div>
+
+	<form  action="{{url_for('picture_upload', usr=usr_enc, token=token_key)}}" method="post">
+		<input type="text" name="b64_image" id="b64" style="display: none">
+		<button class="submit_btn" type="submit">Submit</button>
+		
+	</form>
+	
+</div>
+{%endblock%}

@@ -3,12 +3,12 @@ from flask import url_for, flash
 from flask_login import current_user, login_user
 from flask_login import logout_user, login_required
 from werkzeug.urls import url_parse
-from app import app
-from app.forms import LoginForm 
+from app import app, database
+from app.forms import LoginForm, SignUpForm 
 from app.models import User_Profile as user
 import app.processing as pr 
 import os
-
+import requests
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -16,11 +16,31 @@ def index():
 	return render_template('home.html')
 
 
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+	if current_user.is_authenticated:
+		return redirect(url_for('logged_in'))
+
+	form = SignUpForm()
+
+
+	if form.validate_on_submit():
+		usr = user(firstName=form.firstName.data, lastName=form.lastName.data, regNo=form.regNo.data)
+		usr.set_password(form.password.data)
+		database.session.add(usr)
+		database.session.commit()
+		return  redirect(url_for('picture_upload', usr=pr.encoding_int(usr.id), token=pr.token_key))
+
+
+	return render_template('register.html', form=form)
+
+
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
 	if current_user.is_authenticated:
-		return redirect(url_for('index'))
+		return redirect(url_for('logged_in'))
 
 	form = LoginForm()
 
@@ -44,21 +64,64 @@ def logout():
 	logout_user()
 	return redirect(url_for('index'))
 
+
+
+
+@app.route('/pic_upload', methods=['POST', 'GET'])
+def picture_upload():
+	try:
+		user_id = pr.decoding_int(request.args.get('usr'))
+	except:
+		flash('method not acceptable!')
+		return redirect(url_for('register'))
+
+	if pr.token_key != request.args.get('token'):
+		return redirect(url_for('index'))
+
+	usr = user.query.get(user_id)
+
+	if request.method == 'POST':
+		image_b64 = request.form['b64_image']
+		decoded_img = pr.decode_base64(image_b64)
+		face_encoding = pr.facial_encode(decoded_img)
+
+		if face_encoding.all() == 0:
+			flash('Could not find a face in the picture. Try Adjusting the lighting conditions')
+			return redirect(url_for('picture_upload', usr=pr.encoding_int(usr.id), token=pr.token_key))
+
+		file_url = os.path.join(app.config['UPLOAD_FOLDER'], usr.regNo.replace('/', '_'))
+		pr.save_enc(file_url, face_encoding)
+		usr.set_uploaded_image()
+		database.session.commit()
+		flash("You have Succesfully registered!")
+		return redirect(url_for('login'))
+	
+	return render_template('picture_upload.html', usr_enc=pr.encoding_int(usr.id), token_key=pr.token_key)
+
+
+
+
+
 @app.route('/pic', methods=['POST', 'GET'])
 def picture_verify():
 	try:
-		get_id = pr.decoding_int(request.args.get('usr'))
+		user_id = pr.decoding_int(request.args.get('usr'))
 	except:
 		flash('method not acceptable!')
 		return redirect(url_for('login'))
 		
-	usr = user.query.get(get_id)
+	
 
 	if pr.token_key != request.args.get('token'):
 		flash('method not acceptable! Sign In first!')
 		return redirect(url_for('login'))
 
+	usr = user.query.get(user_id)
 	print(usr)
+
+	if not usr.has_uploaded_image():
+		flash('You have not completed registration. Please upload image to complete it!')
+		return redirect(url_for('picture_upload', usr=pr.encoding_int(usr.id), token=pr.token_key))
 
 	if request.method == 'POST':
 		form = request.form
@@ -70,9 +133,7 @@ def picture_verify():
 			flash('Could not find a face in the picture. Try Adjusting the lighting conditions')
 			return redirect(url_for('picture_verify', usr=pr.encoding_int(usr.id), token=pr.token_key))
 
-		# file_url = os.path.join(app.config['UPLOAD_FOLDER'], '2016_232383')
-		# pr.save_enc(file_url, face_encoding)
-		test_url = os.path.join(app.config['UPLOAD_FOLDER'], 'test')
+		test_url = os.path.join(app.config['UPLOAD_FOLDER'], usr.regNo.replace('/', '_'))
 		test_data = pr.load_enc(test_url)
 		match = pr.match_encodings(test_data, face_encoding)
 		dist = pr.face_distance(test_data, face_encoding)
@@ -89,10 +150,8 @@ def picture_verify():
 			print('Face does not match the test data')
 			flash('Failed to log in. Face does not match')
 			return redirect(url_for('login'))
-		#print(data)
 
 
-		#print(face_encoding)
 	return render_template('pictureCapture.html', usr_enc=pr.encoding_int(usr.id), token_key=pr.token_key)
 
 @app.route('/welcome')
