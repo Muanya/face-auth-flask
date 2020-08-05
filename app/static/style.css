@@ -11,6 +11,11 @@ body {
   color: #fff;
 }
 
+h3 {
+  color: #03e9f4;
+  text-align: center;
+}
+
 
 .logo {
   width: 50px;
@@ -27,7 +32,7 @@ body {
 
 .form_box {
   position: absolute;
-  top: 50%;
+  top: 55%;
   left: 50%;
   width: 400px;
   transform: translate(-50%, -50%);
@@ -85,7 +90,7 @@ body {
   overflow: hidden;
   transition: .5s;
   margin-top: 40px;
-  margin-left: 150px;
+  margin-left: 130px;
   letter-spacing: 3px;
   border:none;
   border-bottom: 1px solid #fff;
