@@ -8,9 +8,9 @@ class Config(object):
 	"""
 	DEBUG = False
 	CSRF_ENABLED = True
-	SECRET_KEY = "try-guessing-the-secret-key"
+	SECRET_KEY = '4zQnhnJ--zjWoOqsEFLXMImma5tnmshNXN5E-dobXSc'
 	TESTING = False
-	SQLALCHEMY_DATABASE_URI = 'sqlite:///'+os.path.join(base_dir, 'app.db') # os.environ['DATABASE_URL']
+	SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL'] # 'sqlite:///'+os.path.join(base_dir, 'app.db')
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 	UPLOAD_FOLDER = os.path.join(base_dir, 'face_enc')
 
